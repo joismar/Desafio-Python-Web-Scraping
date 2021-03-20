@@ -2,7 +2,8 @@ import scrapy
 
 class OlharDigitalSpyder(scrapy.Spider):
 	'''
-	use scrapy crawl olhardigital -a qtde=<QTDE>
+	Use "scrapy crawl olhadigital"
+	Adicione "-a qtde=<QTDE>" para especificar a quantidade
 	'''
 	name = 'olhardigital'
 
@@ -24,10 +25,10 @@ class OlharDigitalSpyder(scrapy.Spider):
 		for post_link in response.css('div.text > a')[:self.qtde]:
 			# Parte 3
 			yield scrapy.Request(post_link.attrib['href'], callback=self.parsePost)
-
+	
 	def parsePost(self, response):
 		# Parte 4
-		# OBS: Não tem subtitle e time na página da postagem
+		# OBS: Não encontrei subtitle e time na página da postagem
 		yield {
 			'title': response.css('div.text > h1::text').get().strip(), 
 			'subtitle': None, 
