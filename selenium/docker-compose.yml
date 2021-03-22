@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  chrome:
+    image: selenium/node-chrome:3.141.59-20210311
+    container_name: rpa_chrome
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+      HUB_PORT: 4444
+      NODE_MAX_SESSION: 4
+      NODE_MAX_INSTANCES: 4
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "9001:5900"
+    links:
+      - hub
+
+  hub:
+    image: selenium/hub:3.141.59-20210311
+    environment:
+      GRID_MAX_SESSION: 4
+      GRID_BROWSER_TIMEOUT: 3000
+      GRID_TIMEOUT: 3000
+    ports:
+      - "4444:4444"
