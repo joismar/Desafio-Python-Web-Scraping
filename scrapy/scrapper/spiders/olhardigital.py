@@ -1,6 +1,6 @@
 import scrapy
 
-class OlharDigitalSpyder(scrapy.Spider):
+class OlharDigitalSpider(scrapy.Spider):
 	'''
 	Use "scrapy crawl olhadigital"
 	Adicione "-a qtde=<QTDE>" para especificar a quantidade
@@ -11,7 +11,7 @@ class OlharDigitalSpyder(scrapy.Spider):
 	start_urls = ['https://olhardigital.com.br/']
 
 	def __init__(self, qtde=5, *args, **kwargs):
-			super(OlharDigitalSpyder, self).__init__(*args, **kwargs)
+			super(OlharDigitalSpider, self).__init__(*args, **kwargs)
 			self.qtde = int(qtde)
 
 	def parse(self, response):

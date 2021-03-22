@@ -2,7 +2,7 @@ import scrapy
 import re
 import json
 
-class AirBnbSpyder(scrapy.Spider):
+class AirBnbSpider(scrapy.Spider):
 	'''
 	Use "scrapy crawl airbnb"
 	Adicione "-a loc=<Cidade>-<SIGLAESTADO>-<Pais>" para especificar o local da pesquisa
@@ -10,7 +10,7 @@ class AirBnbSpyder(scrapy.Spider):
 	name = 'airbnb'
 	
 	def __init__(self, loc='Borá-SP-Brasil', *args, **kwargs):
-			super(AirBnbSpyder, self).__init__(*args, **kwargs)
+			super(AirBnbSpider, self).__init__(*args, **kwargs)
 			self.loc = loc
 			
 			# Passo 1 e 2
@@ -24,6 +24,9 @@ class AirBnbSpyder(scrapy.Spider):
 			self.total_star = 0
 			self.total_price = 0
 			self.total = 0
+
+			# Existe possibilidade do estabelecimento não ter estrelas, então criei um contador específico
+			self.total_for_stars = 0
 		
 	def parse(self, response):
 		# Parte 3
@@ -46,6 +49,8 @@ class AirBnbSpyder(scrapy.Spider):
 
 			# Somei os totais
 			self.total_star += 0 if not star else float(star.get().strip())
+			self.total_for_stars += 0 if not star else 1
+
 			self.total_price += 0 if not price else float(price[0].split('$')[1])
 
 			# Parte 4
@@ -53,7 +58,7 @@ class AirBnbSpyder(scrapy.Spider):
 				"titulo": room.xpath('./div/div/div[2]/text()').get().strip(), 
 				"qtd_avaliacoes:": None if not av else av.re('\d+')[0], 
 				"qtd_estrelas": None if not star else star.get().strip(),
-				"preco": price[0],
+				"preco_rs": price[0].split('$')[1],
 			}
 
 	# Método é chamado se o bot terminar com sucesso e calcula as médias
@@ -61,13 +66,12 @@ class AirBnbSpyder(scrapy.Spider):
 		if reason == 'finished':
 			self.calcAvg()
 
-
-	# Método realiza o cálculo das médias e salva o arquivo
+	# Método realiza o cálculo das médias
 	def calcAvg(self):
 		self.saveAvg(
 			{
-				'price_avg': self.total_price/self.total,
-				'star_avg': self.total_star/self.total
+				'price_avg': round(self.total_price/self.total, 2),
+				'star_avg': round(self.total_star/self.total_for_stars, 2)
 			}
 		)
 
@@ -77,7 +81,7 @@ class AirBnbSpyder(scrapy.Spider):
 		with open(f'joismar_{self.name}_resumo.json', 'w') as result_avg_file:
 			result_avg_file.write(json.dumps({
 				'TOTAL': self.total,
-				'AVG': round(avg, 2)
+				'AVG': avg
 			}))
 
 
