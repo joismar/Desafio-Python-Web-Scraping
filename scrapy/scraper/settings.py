@@ -1,7 +1,7 @@
-BOT_NAME = 'scrapper'
+BOT_NAME = 'scraper'
 
-SPIDER_MODULES = ['scrapper.spiders']
-NEWSPIDER_MODULE = 'scrapper.spiders'
+SPIDER_MODULES = ['scraper.spiders']
+NEWSPIDER_MODULE = 'scraper.spiders'
 
 FEEDS = {
 	'joismar_%(name)s.json': {
