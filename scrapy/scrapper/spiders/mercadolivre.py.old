@@ -1,0 +1,24 @@
+import scrapy
+
+class MercadoLivreSpider(scrapy.Spider):
+	'''
+	Obs: esse método apresenta erro!
+	INCIO DA TENTATIVA 1 DA QUESTÃO 4 
+	'''
+	name = 'mercadolivre'
+	allowed_domain = ['lista.mercadolivre.com.br']
+
+	def __init__(self, s='gpon', *args, **kwargs):
+			super(MercadoLivreSpider, self).__init__(*args, **kwargs)
+			# Passo 1 e 2
+			self.start_urls = [f'https://lista.mercadolivre.com.br/{s}#D[A:{s}]']
+
+	def parse(self, response):
+		for item in response.xpath('normalize-space(//li[@class="ui-search-layout__item"])'):
+			self.log(item)
+			# Passo 3 e 4
+			# Todos os items da primeira página e imagens de cada item já estão na primeira página
+			yield {
+				'title': item.xpath('.//a[@class=ui-search-link]').attrib['title'],
+				'link': item.xpath('.//a[@class=ui-search-link]').attrib['link']
+			}
