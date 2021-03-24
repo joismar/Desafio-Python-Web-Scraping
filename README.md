@@ -58,6 +58,7 @@ As seguintes ferramentas foram usadas:
 ## :white_check_mark: Pré requisitos ##
 
 Antes de começar :checkered_flag:, você precisa ter o [Git](https://git-scm.com) e o [Python](https://www.python.org/) instalados em sua maquina.
+No caso do selenium, deve fazer donwload do [chromedriver](https://chromedriver.chromium.org/downloads) referente a versão do chrome instalado na máquina e colocar na raiz da pasta /selenium.
 
 ## :checkered_flag: Começando ##
 #### Primeiramente...
